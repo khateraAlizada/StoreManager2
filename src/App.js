@@ -107,6 +107,7 @@ function App() {
   const processShipment = (e) => {
     // potentially modify the model
     let shipment = document.getElementById("shipment").value;
+    document.getElementById("processed").value = " shipment processed";
     //let quantity = document.getElementById("quantity").value;
 
     var base_url =
@@ -307,122 +308,87 @@ function App() {
     // clear inputs
   };
 
-  // const updategGenerateMissing = () => {
-  //   // go through and get all stores from the model
-  //   let str = "";
-  //   model.missingss.forEach((i) => {
-  //     str +=
-  //       "StoreID: " +
-  //       i.storeID +
-  //       " ,sku:  " +
-  //       i.sku +
-  //       ", quantiy: " +
-  //       i.quantity +
-  //       " ,aisle:  " +
-  //       i.aisle +
-  //       ",shelf:  " +
-  //       i.shelf +
-  //       "<br>";
-  //   });
-  //   //insert HTML in the <div> with
+  const updatefillShelves = () => {
+    // go through and get all stores from the model
+    let str = "";
+    model.shelves.forEach((i) => {
+      str +=
+        "StoreID: " +
+        i.storeID +
+        " ,sku:  " +
+        i.sku +
+        ", quantiy: " +
+        i.quantity +
+        " ,aisle:  " +
+        i.aisle +
+        ",shelf:  " +
+        i.shelf +
+        "<br>";
+    });
+    //insert HTML in the <div> with
 
-  //   // storeInventory
-  //   let cd = document.getElementById("storeMissing");
-  //   cd.innerHTML = str;
-  // };
-
-  const fillShelf = (e) => {
-    // let arg1 = document.getElementById("storeID");
-    // document.getElementById("storeMissing").value =
-    //  "Missing or sold out Report created!";
+    // storeInventory
+    let cd = document.getElementById("fillShelves");
+    cd.innerHTML = str;
   };
 
-  // const generateMissingReport = (e) => {
+  const fillShelfReport = (e) => {
+     let arg1 = document.getElementById("storeIDF");
+     document.getElementById("filled").value ="filled shelves!";
+  };
+
+   const fillShelf = (e) => {
   //   // potentially modify the model
-  //   let storeID = document.getElementById("storeID").value;
-  //   //let quantity = document.getElementById("quantity").value;
+  let storeID = document.getElementById("storeIDF").value;
+  let managerUserName = document.getElementById("managerUserNameF").value;
+  let managerPassword = document.getElementById("managerPasswordF").value;
+  document.getElementById("filled").value = "filled shelves!";
 
-  //   var base_url =
-  //     "https://cn74yl30dg.execute-api.us-east-1.amazonaws.com/Prod/";
+     var base_url =
+       "https://cn74yl30dg.execute-api.us-east-1.amazonaws.com/Prod/";
 
-  //   let payload = {
-  //     storeID: storeID,
-  //   };
-  //   let msg = JSON.stringify(payload);
+     let payload = {
+       storeID: storeID,
+       managerUserName: managerUserName,
+        managerPassword: managerPassword,
+     };
+     let msg = JSON.stringify(payload);
 
-  //   axios({
-  //     method: "post",
-  //     url: base_url + "generateMissingReport",
-  //     data: {
-  //       body: msg,
-  //     },
-  //   })
-  //     .then(function (response) {
-  //       console.log(response.data.result);
-  //       const list = response.data.result;
+    axios({
+      method: "post",
+      url: base_url + "fillShelf",
+      data: {
+        body: msg,
+      },
+    })
+      .then(function (response) {
+        console.log(response.data.result);
+        const list = response.data.result;
 
-  //       for (let i = 0; i < list.length; i++) {
-  //         console.log(list[i].sku);
-  //         model.missings.push(
-  //           new Missing(
-  //             list[i].storeID,
-  //             list[i].sku,
-  //             list[i].quantity,
-  //             list[i].aisle,
-  //             list[i].shelf
-  //           )
-  //         );
-  //       }
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //   // clear inputs
+        // for (let i = 0; i < list.length; i++) {
+        //   console.log(list[i].sku);
+        //   model.shelves.push(
+        //     new Fill(
+        //       list[i].storeID,
+        //       list[i].sku,
+        //       list[i].quantity,
+        //       list[i].aisle,
+        //       list[i].shelf
+        //     )
+        //   );
+        // }
+        setModel(model.copy()); // this Triggers the redraw
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // clear inputs
 
-  //   setModel(model.copy()); // this Triggers the redraw
-  // };
+   
+   };
 
-  // this can be place inside return
-  //  storeID: <input id="storeID" />;
-  //  sku: <input id="sku" />;
-  //  quantity: <input id="quantity" />;
-
-  // this can be place inside return
-  //  storeID: <input id="storeID" />;
-  //  sku: <input id="sku" />;
-  //  quantity: <input id="quantity" />;
-
-  // this can be place inside return
-  //  storeID: <input id="storeID" />;
-  //  sku: <input id="sku" />;
-  //  quantity: <input id="quantity" />;
-
-  //  <table className="table table-bordered">
-  //       <tr>
-  //         <th>storeID</th>
-  //         <th>sku</th>
-  //         <th>quantity</th>
-  //       </tr>
-
-  //       {shipment.map((item, index) => (
-  //         <tr data-index={index}>
-  //           <td>{item.storeID}</td>
-  //           <td>{item.sku}</td>
-  //           <td>{item.quantity}</td>
-  //         </tr>
-  //       ))}
-  //     </table>
-  //     <button onClick={(e) => processShipment()}> Process Shipment </button>
-  //     result: <input id="shipment-result" readOnly />
-  //     <div id="shipment-list"></div>
-  // idstore: <input id="idstore" />
-  //Store Inventory: <p id="storeInventory"></p>
-  // Store Inventory: <p id="storeInventory"></p>
-  // <button onClick={(e) => generateInventoryReport()}>
-  //   {" "}
-  //   Generate Inventory{" "}
-  // </button>;
-  //<div id="shipment-list"></div>
+ 
+ 
 
   return (
     <div className="App">
@@ -444,7 +410,9 @@ function App() {
       <div id="storeOverStock"></div>
       <p></p>
       shipment: <textarea id="shipment" />
+      processed: <input id="processed" readOnly />
       <button onClick={(e) => processShipment()}>Process Shipment</button>
+      <div id="shipment-list"></div>
       <p></p>
       storeID: <input id="storeIDM" />
       managerUserName: <input id="managerUserNameM" />
@@ -454,8 +422,11 @@ function App() {
       </button>
       <div id="storeMissing"></div>
       <p></p>
-      storeID: <input id="storeIDFillShelf" />
+      storeID: <input id="storeIDF" />
+      managerUserName: <input id="managerUserNameF" />
+      managerPassword: <input id="managerPasswordF" />
       <button onClick={(e) => fillShelf()}>Fill Shelf</button>
+      filled: <input id="filled" readOnly />
       <div id="fillShelves"></div>
     </div>
   );
